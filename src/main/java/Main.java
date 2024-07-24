@@ -26,7 +26,7 @@ public class Main {
         System.out.println("Before merging: " + before);
         IPAddress current = null;
         int counter = 0;
-        sorted.removeIf(str->str.startsWith("#"));
+        sorted.removeIf(str -> str.startsWith("#"));
         for (String rule : sorted) {
             if (current == null) {
                 current = toCIDR(rule);
@@ -46,11 +46,11 @@ public class Main {
                 //System.out.println("Re-assigning current base to " + current);
                 continue;
             }
-            if(current.isIPv4()) {
+            if (current.isIPv4()) {
                 if (counter >= MERGE_TO_CIDR_AMOUNT_IPV4) {
                     createdCIDR.add(current.toString());
                 }
-            }else{
+            } else {
                 if (counter >= MERGE_TO_CIDR_AMOUNT_IPV6) {
                     createdCIDR.add(current.toString());
                 }
@@ -58,10 +58,10 @@ public class Main {
         }
         createdCIDR.forEach(cidr -> {
             var base = toCIDR(cidr);
-            sorted.removeIf(ip ->{
+            sorted.removeIf(ip -> {
                 IPAddress address = toIP(ip);
-                if(address == null){
-                    System.out.println("(Unresolved data) "+ip);
+                if (address == null) {
+                    System.out.println("(Unresolved data) " + ip);
                     return true;
                 }
                 return base.contains(address);
@@ -75,7 +75,7 @@ public class Main {
         builder.add("# [END] Auto merged CIDR - IPV4: " + IPV4_PREFIX_LENGTH + ", IPV6: " + IPV6_PREFIX_LENGTH);
         sorted.forEach(builder::add);
         String data = builder.toString();
-        Files.writeString(file.toPath(),data);
+        Files.writeString(file.toPath(), data);
         System.out.println("CIDR count: " + createdCIDR.size());
         System.out.println("After merging: " + data.lines().count());
     }
