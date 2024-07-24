@@ -33,7 +33,12 @@ public class Main {
                 //System.out.println("Re-assigning current base to " + current);
                 continue;
             }
-            if (toIP(rule).getPrefixLength() != null) {
+            var ip = toIP(rule);
+            if (ip == null) {
+                System.out.println("(Unresolved IP) " + ip);
+                continue;
+            }
+            if (ip.getPrefixLength() != null) {
                 createdCIDR.add(rule);
                 continue;
             }
